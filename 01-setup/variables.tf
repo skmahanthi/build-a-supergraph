@@ -2,6 +2,18 @@ variable "project_id" {
   description = "project id"
 }
 
+variable "github_token" {
+  description = "github user token"
+}
+
+variable "github_username" {
+  description = "github user token"
+}
+
+variable "github_email" {
+  description = "github user token"
+}
+
 variable "project_region" {
   description = "project region"
 }
