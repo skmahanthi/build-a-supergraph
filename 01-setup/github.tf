@@ -9,9 +9,15 @@ resource "github_repository" "infra_repo" {
   visibility  = "private"
 }
 
-//TODO - identify number of repositories needed for subgraphs and update here with the appropriate number (if not 1)
-resource "github_repository" "app_repo" {
-  name        = "${var.demo_name}-app-source"
+//TODO - add in the template param when the subgraph repos exist and are marked as templates
+resource "github_repository" "subgraph_repo_1" {
+  name        = "${var.demo_name}-subgraph-1"
+  description = "Apollo K8s Supergraph subgraph source code repository"
+  visibility  = "private"
+}
+
+resource "github_repository" "subgraph_repo_2" {
+  name        = "${var.demo_name}-subgraph-2"
   description = "Apollo K8s Supergraph subgraph source code repository"
   visibility  = "private"
 }
