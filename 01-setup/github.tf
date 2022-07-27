@@ -10,14 +10,14 @@ resource "github_repository" "infra_repo" {
 }
 
 //TODO - add in the template param when the subgraph repos exist and are marked as templates
-resource "github_repository" "subgraph_repo_1" {
-  name        = "${var.demo_name}-subgraph-1"
+resource "github_repository" "subgraph_repo_a" {
+  name        = "${var.demo_name}-subgraph-a"
   description = "Apollo K8s Supergraph subgraph source code repository"
   visibility  = "private"
 }
 
-resource "github_repository" "subgraph_repo_2" {
-  name        = "${var.demo_name}-subgraph-2"
+resource "github_repository" "subgraph_repo_b" {
+  name        = "${var.demo_name}-subgraph-b"
   description = "Apollo K8s Supergraph subgraph source code repository"
   visibility  = "private"
 }
