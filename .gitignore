@@ -29,3 +29,4 @@ terraform.rc
 .DS_Store
 kubeconfig*
 github-deploy-key.json
+*.tfvars

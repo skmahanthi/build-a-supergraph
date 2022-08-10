@@ -56,7 +56,7 @@ gcloud services enable \
 
 ### Setup terraform variables
 
-In `terraform.tfvars`:
+Copy `terraform.sample_tfvars` to `terraform.tfvars` and replace the values below appropriately:
 
 ```terraform
 github_token = ""
