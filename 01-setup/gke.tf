@@ -9,14 +9,6 @@ module "gke_auth" {
   cluster_name = module.gke[each.key].name
 }
 
-resource "local_file" "kubeconfig" {
-  for_each = {
-    for index, stage in var.demo_stages : stage.name => stage
-  }
-  content  = module.gke_auth[each.key].kubeconfig_raw
-  filename = "kubeconfig-${each.value.name}"
-}
-
 module "gke" {
   source = "terraform-google-modules/kubernetes-engine/google"
   for_each = {
