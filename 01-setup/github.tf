@@ -5,7 +5,7 @@ resource "google_service_account" "github-deploy-gsa" {
 }
 resource "google_project_iam_binding" "github-deploy-binding" {
   project = var.project_id
-  role    = "roles/container.clusterAdmin"
+  role    = "roles/container.developer"
   members = ["serviceAccount:${google_service_account.github-deploy-gsa.email}"]
 }
 resource "google_service_account_key" "github-deploy-key" {
