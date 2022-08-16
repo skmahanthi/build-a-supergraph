@@ -88,11 +88,14 @@ terraform apply # will prompt for confirmation
 # TODO: confirm time to run after infra finalized
 ```
 
-The above commands do the following:
+<details>
+  <summary>What does this do?</summary>
 
 - `terraform init`: Installs the required module dependencies for creating the Google Kubernetes Engine (GKE) clusters and networking
 - `terraform plan`: Shows the planned infrastructure that's going to be created when running the next command, as well as showing any errors before applying
 - `terraform apply`: Applies the planned infrastructure against your GCP account
+
+</details>
 
 Once finished, `terraform apply` will output:
 
@@ -110,7 +113,10 @@ After creating the necessary clusters, you will need to run the included cluster
 ./setup_clusters.sh
 ```
 
-This script does a few things for both `dev` and `prod` clusters:
+<details>
+  <summary>What does this do?</summary>
+
+For both `dev` and `prod` clusters:
 
 - Configures your local `kubeconfig` with access information, making it easier to apply local Helm charts
 - Creates a `router` namespace we'll use to deploy the Apollo Router
@@ -119,6 +125,8 @@ This script does a few things for both `dev` and `prod` clusters:
   - The CSI driver is used by the Apollo Router infrastructure later to access the Apollo API key and graph reference securely, using GCP's Secret Manager
 - Configures permissions to allow access to the secrets within Secret Manager
 
+</details>
+
 After completing, you should be able to run:
 
 ```sh
@@ -126,7 +134,7 @@ kubectx apollo-supergraph-k8s-dev
 kubectl get pods -A
 ```
 
-Which returns all running pods (which there should be none).
+Which returns all running pods.
 
 ## Part C: Deploy applications
 
