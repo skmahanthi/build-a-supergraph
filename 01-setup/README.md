@@ -21,7 +21,7 @@ cd build-a-supergraph
 - [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/)
 - [kubectx](https://github.com/ahmetb/kubectx#installation)
-- [Helm](https://helm.sh/docs/intro/install/)
+- Optional: [Helm](https://helm.sh/docs/intro/install/)
 
 ### Gather accounts
 
@@ -84,7 +84,8 @@ cd 01-setup
 terraform init # 2 minutes
 terraform plan
 terraform apply # will prompt for confirmation
-# takes awhile- grab a cup of coffee while it runs
+# takes about 10-20 minutes- grab a cup of coffee while it runs
+# TODO: confirm time to run after infra finalized
 ```
 
 The above commands do the following:
