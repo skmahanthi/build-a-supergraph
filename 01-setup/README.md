@@ -1,6 +1,6 @@
 # 01 - Setup
 
-⏱ estimated time: TODO
+⏱ estimated time: 45 minutes (TODO verify)
 
 ## What you'll build
 
@@ -97,13 +97,21 @@ terraform apply # will prompt for confirmation
 
 </details>
 
-Once finished, `terraform apply` will output:
+Outputs:
 
-- The cluster names in the terminal window you used to run the command
-  - By default, these will be `apollo-supergraph-k8s-dev`, `apollo-supergraph-k8s-prod`, and `apollo-supergraph-k8s-tooling-infra`
-  - If you change the cluster prefix, you will need to update the cluster script (noted below), however we do not recommend doing so
-- A `github-deploy-key.json` file in the `01-setup` folder that includes the credentials for a GCP service account used for the Github workflow
-  - Do not commit this to source, as it will allow deploy access to your Kubernetes clusters; this repository automatically excludes this file from tracking
+1. `terraform` output:
+
+   ```
+   Outputs:
+
+   kubernetes_cluster_names = {
+     "dev" = "apollo-supergraph-k8s-dev"
+     "prod" = "apollo-supergraph-k8s-prod"
+     "tooling-infra" = "apollo-supergraph-k8s-tooling-infra"
+   }
+   ```
+
+2. `01-setup/github-deploy-key.json`. **Do not check this into version control.** You will use this file in Part C to deploy subgraph services.
 
 ### Run cluster setup script
 
@@ -140,6 +148,59 @@ Which returns all running pods.
 
 ### Deploy subgraphs
 
-- TODO: add github secrets to subgraph-a and subgraph-b repos for kube cluster access
-- TODO: trigger deploy workflows (dev and prod)
-- TODO: try them out over nodeports
+In your newly created repos for subgraph-a and subgraph-b:
+
+1. Navigate to the Settings > Secrets > Actions Secrets page in Github.
+2. Create a new Repository secret.
+3. Name it `GCP_CREDENTIALS`.
+4. Paste in the content of `01-setup/github-deploy-key.json` and submit.
+
+To build the first Docker image of your subgraphs:
+
+1. Navigate to the Actions tab.
+2. Select the `docker-build` action.
+3. Where it says "This workflow has a workflow_dispatch event trigger." run the workflow.
+
+To deploy the images to your clusters.
+
+1. Select the `gke-deploy` action.
+2. Run the workflow for both the `apollo-supergraph-k8s-dev` and `apollo-supergraph-k8s-prod` clusters.
+
+To access a subgraph directly, use `kubectl port-forward`:
+
+```sh
+kubectx apollo-supergraph-k8s-dev
+kubectl port-forward service/subgraph-a-chart 4000:4000
+open http://localhost:4000
+```
+
+<details>
+  <summary>Optional: how do I specify a different cluster prefix?</summary>
+
+1.  Before running `terraform apply`, add another variable to `terraform.tfvars`:
+
+    ```terraform
+    demo_name = "my-custom-prefix"
+    ```
+
+2.  Before running `setup_clusters.sh`, export the prefix as a variable:
+
+    ```sh
+    export CLUSTER_PREFIX=my-custom-prefix
+    ./setup_clusters.sh
+    ```
+
+3.  After creating the repos for subgraphs and infra, you'll need to update cluster names in workflows files in `.github/workflows` in each repo.
+
+    ```yaml
+    # .github/workflows/gke-deploy.yaml
+    on:
+      workflow_dispatch:
+        inputs:
+          clusters:
+            options:
+              - my-custom-prefix-dev
+              - my-custom-prefix-prod
+    ```
+
+</details>
