@@ -61,6 +61,3 @@ variable "demo_stages" {
 variable "apollo_key" {
   description = "Apollo key for Router"
 }
-variable "apollo_graph_ref" {
-  description = "Apollo Graph Reference (graphref)"
-}
