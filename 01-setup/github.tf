@@ -6,7 +6,7 @@ provider "github" {
 resource "github_repository" "infra_repo" {
   name        = "${var.demo_name}-infrastructure"
   description = "Apollo K8s Supergraph infrastructure repository"
-  visibility  = "private"
+  visibility  = "private" # TODO make public
   template {
     owner      = "apollosolutions"
     repository = "build-a-supergraph-infra"
@@ -16,7 +16,7 @@ resource "github_repository" "infra_repo" {
 resource "github_repository" "subgraph_repo_a" {
   name        = "${var.demo_name}-subgraph-a"
   description = "Apollo K8s Supergraph subgraph source code repository"
-  visibility  = "private"
+  visibility  = "private" # TODO make public
   template {
     owner      = "apollosolutions"
     repository = "build-a-supergraph-subgraph-a"
@@ -26,7 +26,7 @@ resource "github_repository" "subgraph_repo_a" {
 resource "github_repository" "subgraph_repo_b" {
   name        = "${var.demo_name}-subgraph-b"
   description = "Apollo K8s Supergraph subgraph source code repository"
-  visibility  = "private"
+  visibility  = "private" # TODO make public
   template {
     owner      = "apollosolutions"
     repository = "build-a-supergraph-subgraph-b"
