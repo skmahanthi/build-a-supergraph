@@ -148,23 +148,16 @@ Which returns all running pods.
 
 ### Deploy subgraphs
 
-In your newly created repos for subgraph-a and subgraph-b:
+Terraform created two repos for your subgraphs (and a third repo for infrastructure). After creating the repos:
 
-1. Navigate to the Settings > Secrets > Actions Secrets page in Github.
-2. Create a new Repository secret.
-3. Name it `GCP_CREDENTIALS`.
-4. Paste in the content of `01-setup/github-deploy-key.json` and submit.
+- Terraform automatically added a repository secret called `GCP_CREDENTIALS` in each repo.
+- The initial commit kicked off the "docker-build" actions to build Docker images for deployment.
 
-To build the first Docker image of your subgraphs:
+To deploy the images to your clusters:
 
 1. Navigate to the Actions tab.
-2. Select the `docker-build` action.
-3. Where it says "This workflow has a workflow_dispatch event trigger." run the workflow.
-
-To deploy the images to your clusters.
-
 1. Select the `gke-deploy` action.
-2. Run the workflow for both the `apollo-supergraph-k8s-dev` and `apollo-supergraph-k8s-prod` clusters.
+1. Run the workflow for both the `apollo-supergraph-k8s-dev` and `apollo-supergraph-k8s-prod` clusters.
 
 To access a subgraph directly, use `kubectl port-forward`:
 
