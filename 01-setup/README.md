@@ -21,6 +21,7 @@ cd build-a-supergraph
 - [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/)
 - [kubectx](https://github.com/ahmetb/kubectx#installation)
+- [Github CLI](https://cli.github.com/)
 - Optional: [Helm](https://helm.sh/docs/intro/install/)
 
 ### Gather accounts
@@ -55,6 +56,8 @@ gcloud services enable \
   secretmanager.googleapis.com \
   cloudasset.googleapis.com \
   storage.googleapis.com
+
+gh auth login
 ```
 
 ### Setup terraform variables
@@ -62,13 +65,12 @@ gcloud services enable \
 Copy `terraform.sample_tfvars` to `terraform.tfvars` within the `01-setup` folder and replace the values below appropriately:
 
 ```terraform
-github_token = ""
+github_token    = ""
 github_username = ""
-github_email = ""
-project_id = ""
-project_region = "us-east1"
-apollo_key       = ""
-apollo_graph_ref = ""
+github_email    = ""
+project_id      = ""
+project_region  = "us-east1"
+apollo_key      = ""
 ```
 
 ## Part B: Provision resources
@@ -155,9 +157,39 @@ Terraform created two repos for your subgraphs (and a third repo for infrastruct
 
 To deploy the images to your clusters:
 
-1. Navigate to the Actions tab.
-1. Select the `gke-deploy` action.
-1. Run the workflow for both the `apollo-supergraph-k8s-dev` and `apollo-supergraph-k8s-prod` clusters.
+```sh
+gh workflow run deploy-gke --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-a \
+  -f version=main \
+  -f cluster=apollo-supergraph-k8s-dev \
+  -f publish=false \
+  -f variant=dev \
+  -f dry-run=false \
+  -f debug=false
+
+gh workflow run deploy-gke --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-a \
+  -f version=main \
+  -f cluster=apollo-supergraph-k8s-prod \
+  -f publish=false \
+  -f variant=prod \
+  -f dry-run=false \
+  -f debug=false
+
+gh workflow run deploy-gke --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-b \
+  -f version=main \
+  -f cluster=apollo-supergraph-k8s-dev \
+  -f publish=false \
+  -f variant=dev \
+  -f dry-run=false \
+  -f debug=false
+
+gh workflow run deploy-gke --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-b \
+  -f version=main \
+  -f cluster=apollo-supergraph-k8s-prod \
+  -f publish=false \
+  -f variant=prod \
+  -f dry-run=false \
+  -f debug=false
+```
 
 To access a subgraph directly, use `kubectl port-forward`:
 
