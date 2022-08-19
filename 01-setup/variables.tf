@@ -59,5 +59,9 @@ variable "demo_stages" {
 
 // apollo-specific variables used for secrets
 variable "apollo_key" {
-  description = "Apollo key for Router"
+  description = "Apollo key for checks, publishes, and Router Uplink"
+}
+
+variable "apollo_graph_id" {
+  description = "Apollo graph ID for checks, publishes, and Router Uplink"
 }

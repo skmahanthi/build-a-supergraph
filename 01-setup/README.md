@@ -111,6 +111,9 @@ Outputs:
      "prod" = "apollo-supergraph-k8s-prod"
      "tooling-infra" = "apollo-supergraph-k8s-tooling-infra"
    }
+   repo_infra = "https://github.com/you/apollo-supergraph-k8s-infrastructure"
+   repo_subgraph_a = "https://github.com/you/apollo-supergraph-k8s-subgraph-a"
+   repo_subgraph_b = "https://github.com/you/apollo-supergraph-k8s-subgraph-b"
    ```
 
 2. `01-setup/github-deploy-key.json`. **Do not check this into version control.** You will use this file in Part C to deploy subgraph services.

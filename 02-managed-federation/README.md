@@ -1,6 +1,6 @@
 # 02 - Managed federation
 
-⏱ estimated time: TODO
+⏱ estimated time: 3 minutes
 
 ## What you'll build
 
@@ -8,7 +8,7 @@
 
 ## Part A: Publishing subgraphs
 
-Add your Apollo API key and graph ID as secrets in your subgraph repos:
+Trigger the deploy workflows, this time setting `publish=true` to publish to Studio.
 
 ```sh
 export APOLLO_KEY=<api key from 01-setup/terraform.tfvars>
@@ -61,5 +61,7 @@ gh workflow run deploy-gke --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-b \
 
 ## Part B: Deploy Apollo Router
 
-- TODO: manually trigger deploy workflow in infra repo (deploys both router and ingress)
-- TODO: test operations against the router using explorer
+```sh
+kubectl port-forward svc/router 4000:80
+open http://localhost:4000
+```
