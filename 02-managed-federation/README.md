@@ -11,21 +11,6 @@
 Trigger the deploy workflows, this time setting `publish=true` to publish to Studio.
 
 ```sh
-export APOLLO_KEY=<api key from 01-setup/terraform.tfvars>
-export APOLLO_GRAPH_ID=<graphid> # graphref without @current
-
-gh secret set APOLLO_KEY -b"${APOLLO_KEY}" --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-a
-
-gh secret set APOLLO_KEY -b"${APOLLO_KEY}" --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-b
-
-gh secret set APOLLO_GRAPH_ID -b"${APOLLO_GRAPH_ID}" --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-a
-
-gh secret set APOLLO_GRAPH_ID -b"${APOLLO_GRAPH_ID}" --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-b
-```
-
-Trigger the deploy workflows, this time setting `publish=true` to publish to Studio.
-
-```sh
 gh workflow run deploy-gke --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-a \
   -f version=main \
   -f cluster=apollo-supergraph-k8s-dev \
@@ -61,7 +46,23 @@ gh workflow run deploy-gke --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-b \
 
 ## Part B: Deploy Apollo Router
 
+```
+gh workflow run "Deploy Router GKE" --repo $GITHUB_ORG/apollo-supergraph-k8s-infrastructure \
+  -f version=v0.16.0 \
+  -f cluster=apollo-supergraph-k8s-dev \
+  -f variant=dev \
+  -f dry-run=false \
+  -f debug=false
+
+gh workflow run "Deploy Router GKE" --repo $GITHUB_ORG/apollo-supergraph-k8s-infrastructure \
+  -f version=v0.16.0 \
+  -f cluster=apollo-supergraph-k8s-prod \
+  -f variant=prod \
+  -f dry-run=false \
+  -f debug=false
+```
+
 ```sh
-kubectl port-forward svc/router 4000:80
+kubectl port-forward svc/router -n router 4000:80
 open http://localhost:4000
 ```
