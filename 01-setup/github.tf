@@ -95,3 +95,9 @@ resource "github_actions_secret" "infra_apollo_graph_secret" {
   secret_name     = "APOLLO_GRAPH_ID"
   plaintext_value = var.apollo_graph_id
 }
+
+resource "github_actions_secret" "infra_apollo_key_resource_name" {
+  repository      = github_repository.infra_repo.name
+  secret_name     = "APOLLO_KEY_RESOURCE_NAME"
+  plaintext_value = google_secret_manager_secret_version.apollo-key-version.name
+}
