@@ -78,6 +78,22 @@ resource "github_actions_secret" "infra_gcp_secret" {
   plaintext_value = base64decode(google_service_account_key.github-deploy-key.private_key)
 }
 
+resource "github_actions_secret" "subgraph_a_cluster_prefix" {
+  repository      = github_repository.subgraph_repo_a.name
+  secret_name     = "CLUSTER_PREFIX"
+  plaintext_value = var.demo_name
+}
+resource "github_actions_secret" "subgraph_b_cluster_prefix" {
+  repository      = github_repository.subgraph_repo_b.name
+  secret_name     = "CLUSTER_PREFIX"
+  plaintext_value = var.demo_name
+}
+resource "github_actions_secret" "infra_cluster_prefix" {
+  repository      = github_repository.infra_repo.name
+  secret_name     = "CLUSTER_PREFIX"
+  plaintext_value = var.demo_name
+}
+
 resource "github_actions_secret" "subgraph_a_apollo_secret" {
   repository      = github_repository.subgraph_repo_a.name
   secret_name     = "APOLLO_KEY"

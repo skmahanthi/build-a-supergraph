@@ -99,24 +99,20 @@ terraform apply # will prompt for confirmation
 
 </details>
 
+Expected output
+
+```
 Outputs:
 
-1. `terraform` output:
-
-   ```
-   Outputs:
-
-   kubernetes_cluster_names = {
-     "dev" = "apollo-supergraph-k8s-dev"
-     "prod" = "apollo-supergraph-k8s-prod"
-     "tooling-infra" = "apollo-supergraph-k8s-tooling-infra"
-   }
-   repo_infra = "https://github.com/you/apollo-supergraph-k8s-infrastructure"
-   repo_subgraph_a = "https://github.com/you/apollo-supergraph-k8s-subgraph-a"
-   repo_subgraph_b = "https://github.com/you/apollo-supergraph-k8s-subgraph-b"
-   ```
-
-2. `01-setup/github-deploy-key.json`. **Do not check this into version control.** You will use this file in Part C to deploy subgraph services.
+kubernetes_cluster_names = {
+  "dev" = "apollo-supergraph-k8s-dev"
+  "prod" = "apollo-supergraph-k8s-prod"
+  "tooling-infra" = "apollo-supergraph-k8s-tooling-infra"
+}
+repo_infra = "https://github.com/you/apollo-supergraph-k8s-infrastructure"
+repo_subgraph_a = "https://github.com/you/apollo-supergraph-k8s-subgraph-a"
+repo_subgraph_b = "https://github.com/you/apollo-supergraph-k8s-subgraph-b"
+```
 
 ### Run cluster setup script
 
@@ -163,33 +159,25 @@ To deploy the images to your clusters:
 ```sh
 gh workflow run deploy-gke --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-a \
   -f version=main \
-  -f cluster=apollo-supergraph-k8s-dev \
-  -f publish=false \
-  -f variant=dev \
+  -f environment=dev \
   -f dry-run=false \
   -f debug=false
 
 gh workflow run deploy-gke --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-a \
   -f version=main \
-  -f cluster=apollo-supergraph-k8s-prod \
-  -f publish=false \
-  -f variant=prod \
+  -f environment=prod \
   -f dry-run=false \
   -f debug=false
 
 gh workflow run deploy-gke --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-b \
   -f version=main \
-  -f cluster=apollo-supergraph-k8s-dev \
-  -f publish=false \
-  -f variant=dev \
+  -f environment=dev \
   -f dry-run=false \
   -f debug=false
 
 gh workflow run deploy-gke --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-b \
   -f version=main \
-  -f cluster=apollo-supergraph-k8s-prod \
-  -f publish=false \
-  -f variant=prod \
+  -f environment=prod \
   -f dry-run=false \
   -f debug=false
 ```
@@ -216,19 +204,6 @@ open http://localhost:4000
     ```sh
     export CLUSTER_PREFIX=my-custom-prefix
     ./setup_clusters.sh
-    ```
-
-3.  After creating the repos for subgraphs and infra, you'll need to update cluster names in workflows files in `.github/workflows` in each repo.
-
-    ```yaml
-    # .github/workflows/gke-deploy.yaml
-    on:
-      workflow_dispatch:
-        inputs:
-          clusters:
-            options:
-              - my-custom-prefix-dev
-              - my-custom-prefix-prod
     ```
 
 </details>
