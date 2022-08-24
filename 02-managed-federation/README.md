@@ -6,7 +6,11 @@
 
 ![Architecture diagram of the supergraph](diagram.png)
 
-## Part A: Deploy Apollo Router
+## Part A: Publish subgraph schemas to Apollo Studio
+
+TODO: describe adding/enabling rover subgraph publish in deploy workflows
+
+## Part B: Deploy Apollo Router
 
 ```
 gh workflow run "Deploy Router GKE" --repo $GITHUB_ORG/apollo-supergraph-k8s-infrastructure \
