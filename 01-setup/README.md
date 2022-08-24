@@ -111,7 +111,7 @@ Expected output:
 kubernetes_cluster_names = {
   "dev" = "apollo-supergraph-k8s-dev"
   "prod" = "apollo-supergraph-k8s-prod"
-  "tooling-infra" = "apollo-supergraph-k8s-tooling-infra"
+  "infra" = "apollo-supergraph-k8s-infra"
 }
 repo_infra = "https://github.com/you/apollo-supergraph-k8s-infrastructure"
 repo_subgraph_a = "https://github.com/you/apollo-supergraph-k8s-subgraph-a"

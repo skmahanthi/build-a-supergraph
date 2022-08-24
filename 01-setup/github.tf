@@ -4,7 +4,7 @@ provider "github" {
 
 // repositories for k8s KRM/Terraform
 resource "github_repository" "infra_repo" {
-  name        = "${var.demo_name}-infrastructure"
+  name        = "${var.demo_name}-infra"
   description = "Apollo K8s Supergraph infrastructure repository"
   visibility  = "public"
   depends_on = [
