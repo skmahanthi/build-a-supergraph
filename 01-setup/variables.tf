@@ -1,6 +1,6 @@
 variable "demo_name" {
   default     = "apollo-supergraph-k8s"
-  description = "name of the demo (used for resources)"
+  description = "name of the demo (used for K8s clusters, graphs, and github repos)"
 }
 
 variable "project_id" {
@@ -8,14 +8,6 @@ variable "project_id" {
 }
 
 variable "github_token" {
-  description = "github user token"
-}
-
-variable "github_username" {
-  description = "github user token"
-}
-
-variable "github_email" {
   description = "github user token"
 }
 
