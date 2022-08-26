@@ -1,5 +1,4 @@
-project_id     = ""         # Google Cloud Project ID
-project_region = "us-east1" # if changed, `export PROJECT_REGION=us-central1` before running setup_clusters.sh
+project_id     = "" # Google Cloud Project ID
 
 github_token    = "" # Personal API Token
 

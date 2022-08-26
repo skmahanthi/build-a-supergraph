@@ -28,3 +28,7 @@ gh workflow run "Deploy Router GKE" --repo $GITHUB_ORG/apollo-supergraph-k8s-inf
 kubectl port-forward svc/router -n router 4000:80
 open http://localhost:4000
 ```
+
+## Onward!
+
+[Step 3: Schema Checks](../03-schema-checks/)
