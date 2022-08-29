@@ -19,3 +19,7 @@
   - merge PR
   - see results in dev
   - trigger prod deploy
+
+## Onward!
+
+[Step 4: Observability](../04-observability/)

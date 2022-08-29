@@ -16,3 +16,7 @@
 ## Part B: Demonstrate traces and metrics
 
 - TODO: instructions for seeing traces and metrics
+
+## Onward!
+
+[Step 5: Load Testing](../05-load-testing/)

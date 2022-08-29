@@ -20,10 +20,12 @@
 terraform destroy
 # takes 10 minutes
 
-kubectl config delete-context supergraph-dev
-kubectl config delete-context supergraph-prod
-kubectl config delete-user gke_${PROJECT_ID}_us-east1_apollo-supergraph-k8s-dev
-kubectl config delete-user gke_${PROJECT_ID}_us-east1_apollo-supergraph-k8s-prod
-kubectl config delete-cluster gke_${PROJECT_ID}_us-east1_apollo-supergraph-k8s-dev
-kubectl config delete-cluster gke_${PROJECT_ID}_us-east1_apollo-supergraph-k8s-prod
+kubectl config delete-context apollo-supergraph-k8s-dev
+kubectl config delete-context apollo-supergraph-k8s-prod
 ```
+
+Terraform does not delete the Docker containers from Github. Visit `https://github.com/<your github username>?tab=packages` and delete the packages created by the previous versions of the repos.
+
+## Congratulations! 🎉
+
+You've completed the tutorial!

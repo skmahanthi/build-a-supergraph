@@ -1,6 +1,6 @@
 # 01 - Setup
 
-⏱ estimated time: 45 minutes (TODO verify)
+⏱ estimated time: 45 minutes
 
 ## What you'll build
 
@@ -31,18 +31,27 @@ cd build-a-supergraph
 - [Google Cloud](https://console.cloud.google.com/freetrial)
   - Must have a project [with billing enabled](https://cloud.google.com/resource-manager/docs/creating-managing-projects#gcloud)
 
+### Setup terraform variables
+
+Create a copy of `terraform.tfvars.example` and rename to `terraform.tfvars` within the `01-setup` folder.
+
 ### Gather credentials
 
+- Google Cloud project id.
+  - Add it to `terraform.tfvars`
 - [Github personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
   - [Settings > Developer Settings > Personal Access Tokens](https://github.com/settings/tokens)
   - Grant it permissions to the following scopes:
     - `repo` (for creating repos)
     - `delete-repo` (for cleanup at the end)
+  - Add it to `terraform.tfvars`
 - [Apollo Studio Personal API key](https://studio.apollographql.com/user-settings/api-keys)
+  - **Do not** add it to `terraform.tfvars`
+
+### Run setup commands
 
 ```sh
 export PROJECT_ID="<your-project-id>"
-export APOLLO_KEY="<your personal apollo api key>"
 
 # gcloud
 gcloud components update
@@ -55,13 +64,17 @@ gcloud services enable \
   secretmanager.googleapis.com \
   cloudasset.googleapis.com \
   storage.googleapis.com
+```
 
-# github
+```
 gh auth login
+```
 
-# apollo
+```
+export APOLLO_KEY="<your personal apollo api key>"
+cd 01-setup
 ./create_graph.sh
-# Save the output for the next step! Example:
+# Save the output in terraform.tfvars. Example:
 #
 # New terraform variables:
 #
@@ -86,11 +99,14 @@ gh auth login
 
 </details>
 
-### Setup terraform variables
-
-Copy `terraform.sample_tfvars` to `terraform.tfvars` within the `01-setup` folder and replace the values according to the comments.
-
 ## Part B: Provision resources
+
+<details>
+  <summary>Have you run this tutorial before?</summary>
+
+You may need to clean up your Github packages before creating new repos of the same name. Visit `https://github.com/<your github username>?tab=packages` and delete the packages created by the previous versions of the repos.
+
+</details>
 
 ### Create Kubernetes clusters, basic infrastructure, and Github repositories
 
@@ -138,6 +154,7 @@ The subgraph repos are configured to build and deploy to the `dev` cluster once 
 After creating the necessary clusters, you will need to run the included cluster setup script:
 
 ```sh
+cd 01-setup
 ./setup_clusters.sh # about 3 minutes
 ```
 
@@ -170,6 +187,7 @@ open http://localhost:4000
 Commits to the `main` branch of the subgraph repos are automatically built and deployed to the `dev` cluster. To deploy to prod, run the deploy actions:
 
 ```sh
+export GITHUB_ORG=<your github org>
 gh workflow run deploy-gke --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-a \
   -f version=main \
   -f environment=prod \
@@ -188,3 +206,7 @@ kubectx apollo-supergraph-k8s-prod
 kubectl port-forward service/subgraph-a-chart 4000:4000
 open http://localhost:4000
 ```
+
+## Onward!
+
+[Step 2: Managed Federation](../02-managed-federation/)
