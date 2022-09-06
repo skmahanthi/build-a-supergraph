@@ -4,7 +4,7 @@ set -euo pipefail
 APOLLO_KEY=${APOLLO_KEY:-""}
 CLUSTER_PREFIX=${CLUSTER_PREFIX:-"apollo-supergraph-k8s"}
 ACCOUNT_ID=${ACCOUNT_ID:-""}
-GRAPH_ID=$CLUSTER_PREFIX-$(echo $RANDOM | sha1sum | head -c 6)
+GRAPH_ID=$CLUSTER_PREFIX-$(echo $RANDOM | shasum | head -c 6)
 HEADER=${HEADER:-""}
 
 if [[ "$APOLLO_KEY" == "" ]]; then
