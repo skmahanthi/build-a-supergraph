@@ -48,10 +48,15 @@ resource "google_service_account" "github-deploy-gsa" {
   account_id   = "${substr(var.demo_name, 0, 12)}-github-deploy-gsa"
   display_name = "${substr(var.demo_name, 0, 12)}-github-deploy-gsa"
 }
-resource "google_project_iam_binding" "github-deploy-binding" {
+resource "google_project_iam_member" "github-deploy-developer" {
   project = var.project_id
   role    = "roles/container.developer"
-  members = ["serviceAccount:${google_service_account.github-deploy-gsa.email}"]
+  member  = "serviceAccount:${google_service_account.github-deploy-gsa.email}"
+}
+resource "google_project_iam_member" "github-deploy-viewer" {
+  project = var.project_id
+  role    = "roles/container.clusterViewer"
+  member  = "serviceAccount:${google_service_account.github-deploy-gsa.email}"
 }
 resource "google_service_account_key" "github-deploy-key" {
   service_account_id = google_service_account.github-deploy-gsa.name
@@ -62,67 +67,68 @@ resource "local_file" "github-deploy-key" {
 }
 
 // GH Action Secrets
-resource "github_actions_secret" "subgraph_a_gcp_secret" {
+// subgraph a
+resource "github_actions_secret" "subgraph_a_apollo_graph_secret" {
   repository      = github_repository.subgraph_repo_a.name
-  secret_name     = "GCP_CREDENTIALS"
-  plaintext_value = base64decode(google_service_account_key.github-deploy-key.private_key)
+  secret_name     = "APOLLO_GRAPH_ID"
+  plaintext_value = var.apollo_graph_id
 }
-resource "github_actions_secret" "subgraph_b_gcp_secret" {
-  repository      = github_repository.subgraph_repo_b.name
-  secret_name     = "GCP_CREDENTIALS"
-  plaintext_value = base64decode(google_service_account_key.github-deploy-key.private_key)
+resource "github_actions_secret" "subgraph_a_apollo_secret" {
+  repository      = github_repository.subgraph_repo_a.name
+  secret_name     = "APOLLO_KEY"
+  plaintext_value = var.apollo_key
 }
-resource "github_actions_secret" "infra_gcp_secret" {
-  repository      = github_repository.infra_repo.name
-  secret_name     = "GCP_CREDENTIALS"
-  plaintext_value = base64decode(google_service_account_key.github-deploy-key.private_key)
-}
-
 resource "github_actions_secret" "subgraph_a_cluster_prefix" {
   repository      = github_repository.subgraph_repo_a.name
   secret_name     = "CLUSTER_PREFIX"
   plaintext_value = var.demo_name
 }
-resource "github_actions_secret" "subgraph_b_cluster_prefix" {
-  repository      = github_repository.subgraph_repo_b.name
-  secret_name     = "CLUSTER_PREFIX"
-  plaintext_value = var.demo_name
-}
-resource "github_actions_secret" "infra_cluster_prefix" {
-  repository      = github_repository.infra_repo.name
-  secret_name     = "CLUSTER_PREFIX"
-  plaintext_value = var.demo_name
+resource "github_actions_secret" "subgraph_a_gcp_secret" {
+  repository      = github_repository.subgraph_repo_a.name
+  secret_name     = "GCP_CREDENTIALS"
+  plaintext_value = base64decode(google_service_account_key.github-deploy-key.private_key)
 }
 
-resource "github_actions_secret" "subgraph_a_apollo_secret" {
-  repository      = github_repository.subgraph_repo_a.name
-  secret_name     = "APOLLO_KEY"
-  plaintext_value = var.apollo_key
+// subgraph b
+resource "github_actions_secret" "subgraph_b_apollo_graph_secret" {
+  repository      = github_repository.subgraph_repo_b.name
+  secret_name     = "APOLLO_GRAPH_ID"
+  plaintext_value = var.apollo_graph_id
 }
 resource "github_actions_secret" "subgraph_b_apollo_secret" {
   repository      = github_repository.subgraph_repo_b.name
   secret_name     = "APOLLO_KEY"
   plaintext_value = var.apollo_key
 }
-
-resource "github_actions_secret" "subgraph_a_apollo_graph_secret" {
-  repository      = github_repository.subgraph_repo_a.name
-  secret_name     = "APOLLO_GRAPH_ID"
-  plaintext_value = var.apollo_graph_id
-}
-resource "github_actions_secret" "subgraph_b_apollo_graph_secret" {
+resource "github_actions_secret" "subgraph_b_cluster_prefix" {
   repository      = github_repository.subgraph_repo_b.name
-  secret_name     = "APOLLO_GRAPH_ID"
-  plaintext_value = var.apollo_graph_id
+  secret_name     = "CLUSTER_PREFIX"
+  plaintext_value = var.demo_name
 }
+resource "github_actions_secret" "subgraph_b_gcp_secret" {
+  repository      = github_repository.subgraph_repo_b.name
+  secret_name     = "GCP_CREDENTIALS"
+  plaintext_value = base64decode(google_service_account_key.github-deploy-key.private_key)
+}
+
+// infra
 resource "github_actions_secret" "infra_apollo_graph_secret" {
   repository      = github_repository.infra_repo.name
   secret_name     = "APOLLO_GRAPH_ID"
   plaintext_value = var.apollo_graph_id
 }
-
 resource "github_actions_secret" "infra_apollo_key_resource_name" {
   repository      = github_repository.infra_repo.name
   secret_name     = "APOLLO_KEY_RESOURCE_NAME"
   plaintext_value = google_secret_manager_secret_version.apollo-key-version.name
+}
+resource "github_actions_secret" "infra_cluster_prefix" {
+  repository      = github_repository.infra_repo.name
+  secret_name     = "CLUSTER_PREFIX"
+  plaintext_value = var.demo_name
+}
+resource "github_actions_secret" "infra_gcp_secret" {
+  repository      = github_repository.infra_repo.name
+  secret_name     = "GCP_CREDENTIALS"
+  plaintext_value = base64decode(google_service_account_key.github-deploy-key.private_key)
 }
