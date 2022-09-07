@@ -45,8 +45,8 @@ resource "github_repository" "subgraph_repo_b" {
 // GH -> GKE Serivce Account and credentials
 resource "google_service_account" "github-deploy-gsa" {
   project      = var.project_id
-  account_id   = "github-deploy-gsa"
-  display_name = "github-deploy-gsa"
+  account_id   = "${substr(var.demo_name, 0, 12)}-github-deploy-gsa"
+  display_name = "${substr(var.demo_name, 0, 12)}-github-deploy-gsa"
 }
 resource "google_project_iam_binding" "github-deploy-binding" {
   project = var.project_id
