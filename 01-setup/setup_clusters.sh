@@ -34,17 +34,17 @@ environment_setup(){
     # short context aliases
     kubectx ${1}=.
 
-    kubectl create namespace "router"
-    kubectl create serviceaccount -n "router" "secrets-csi-k8s"
-    kubectl annotate serviceaccount -n "router" "secrets-csi-k8s" iam.gke.io/gcp-service-account=secrets-csi-k8s@$PROJECT_ID.iam.gserviceaccount.com
+    kubectl create namespace router --dry-run=client -o yaml | kubectl apply -f -
+    kubectl create serviceaccount -n "router" "secrets-csi-k8s" --dry-run=client -o yaml | kubectl apply -f -
+    kubectl annotate serviceaccount -n "router" "secrets-csi-k8s" "iam.gke.io/gcp-service-account=${CLUSTER_PREFIX:0:12}-secrets-csi-k8s@$PROJECT_ID.iam.gserviceaccount.com" --overwrite
     gcloud iam service-accounts add-iam-policy-binding \
         --role roles/iam.workloadIdentityUser \
         --member "serviceAccount:${PROJECT_ID}.svc.id.goog[router/secrets-csi-k8s]" \
-        secrets-csi-k8s@$PROJECT_ID.iam.gserviceaccount.com
+        "${CLUSTER_PREFIX:0:12}-secrets-csi-k8s@$PROJECT_ID.iam.gserviceaccount.com"
 
     # apollo key for Router
-    gcloud secrets add-iam-policy-binding apollo-key \
-        --member="serviceAccount:secrets-csi-k8s@$PROJECT_ID.iam.gserviceaccount.com" \
+    gcloud secrets add-iam-policy-binding "${CLUSTER_PREFIX:0:12}-apollo-key" \
+        --member="serviceAccount:${CLUSTER_PREFIX:0:12}-secrets-csi-k8s@$PROJECT_ID.iam.gserviceaccount.com" \
         --role='roles/secretmanager.secretAccessor'
 
     csi_setup $1
