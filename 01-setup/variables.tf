@@ -30,13 +30,6 @@ variable "gke_num_nodes" {
 variable "demo_stages" {
   default = [
     {
-      name : "infra",
-      subnet_range : "10.10.0.0/16"
-      ip_range_pods : "10.20.0.0/16",
-      ip_range_services : "10.30.0.0/16",
-      node_type : "e2-standard-2"
-    },
-    {
       name : "prod",
       subnet_range : "10.40.0.0/16"
       ip_range_pods : "10.50.0.0/16",

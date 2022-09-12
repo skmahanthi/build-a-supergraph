@@ -28,28 +28,3 @@ module "gcp-network" {
     ]
   }
 }
-
-// peering to the dev infra network to be able to upload metric/traces/load testing
-// infra <----> dev
-resource "google_compute_network_peering" "infra-dev-peer" {
-  name         = "${var.demo_name}-infra-dev-peer"
-  network      = module.gcp-network["infra"].network_self_link
-  peer_network = module.gcp-network["dev"].network_self_link
-}
-resource "google_compute_network_peering" "dev-infra-peer" {
-  name         = "${var.demo_name}-dev-infra-peer"
-  peer_network = module.gcp-network["infra"].network_self_link
-  network      = module.gcp-network["dev"].network_self_link
-}
-
-// infra <----> prod
-resource "google_compute_network_peering" "infra-prod-peer" {
-  name         = "${var.demo_name}-infra-prod-peer"
-  network      = module.gcp-network["infra"].network_self_link
-  peer_network = module.gcp-network["prod"].network_self_link
-}
-resource "google_compute_network_peering" "prod-infra-peer" {
-  name         = "${var.demo_name}-prod-infra-peer"
-  peer_network = module.gcp-network["infra"].network_self_link
-  network      = module.gcp-network["prod"].network_self_link
-}

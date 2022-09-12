@@ -34,6 +34,7 @@ environment_setup(){
     # short context aliases
     kubectx ${1}=.
 
+    # secrets setup - namespace, sa, and binding
     kubectl create namespace router --dry-run=client -o yaml | kubectl apply -f -
     kubectl create serviceaccount -n "router" "secrets-csi-k8s" --dry-run=client -o yaml | kubectl apply -f -
     kubectl annotate serviceaccount -n "router" "secrets-csi-k8s" "iam.gke.io/gcp-service-account=${CLUSTER_PREFIX:0:12}-secrets-csi-k8s@$PROJECT_ID.iam.gserviceaccount.com" --overwrite
@@ -46,6 +47,15 @@ environment_setup(){
     gcloud secrets add-iam-policy-binding "${CLUSTER_PREFIX:0:12}-apollo-key" \
         --member="serviceAccount:${CLUSTER_PREFIX:0:12}-secrets-csi-k8s@$PROJECT_ID.iam.gserviceaccount.com" \
         --role='roles/secretmanager.secretAccessor'
+
+    # monitoring setup- namespace, sa, and binding
+    kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
+    kubectl create serviceaccount -n "monitoring" "metrics-writer" --dry-run=client -o yaml | kubectl apply -f -
+    kubectl annotate serviceaccount -n "monitoring" "metrics-writer" "iam.gke.io/gcp-service-account=${CLUSTER_PREFIX:0:12}-metrics-writer@$PROJECT_ID.iam.gserviceaccount.com" --overwrite
+    gcloud iam service-accounts add-iam-policy-binding \
+        --role roles/iam.workloadIdentityUser \
+        --member "serviceAccount:${PROJECT_ID}.svc.id.goog[monitoring/metrics-writer]" \
+        "${CLUSTER_PREFIX:0:12}-metrics-writer@$PROJECT_ID.iam.gserviceaccount.com"
 
     csi_setup $1
 }
