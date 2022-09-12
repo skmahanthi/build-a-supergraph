@@ -75,7 +75,7 @@ resource "google_service_account" "github-manage-gsa" {
 }
 resource "google_project_iam_member" "github-manage-admin" {
   project = var.project_id
-  role    = "roles/container.serviceAdmin"
+  role    = "roles/container.serviceAgent"
   member  = "serviceAccount:${google_service_account.github-manage-gsa.email}"
 }
 resource "google_service_account_key" "github-manage-key" {
