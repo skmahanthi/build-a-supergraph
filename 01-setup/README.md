@@ -22,6 +22,7 @@ cd build-a-supergraph
 - [kubectl](https://kubernetes.io/docs/tasks/tools/)
 - [kubectx](https://github.com/ahmetb/kubectx#installation)
 - [Github CLI](https://cli.github.com/)
+- [jq](https://stedolan.github.io/jq/download/)
 - Optional: [Helm](https://helm.sh/docs/intro/install/)
 
 ### Gather accounts
@@ -31,29 +32,32 @@ cd build-a-supergraph
 - [Google Cloud](https://console.cloud.google.com/freetrial)
   - Must have a project [with billing enabled](https://cloud.google.com/resource-manager/docs/creating-managing-projects#gcloud)
 
-### Setup terraform variables
-
-Create a copy of `terraform.tfvars.example` and rename to `terraform.tfvars` within the `01-setup` folder.
-
 ### Gather credentials
 
-- Google Cloud project id.
-  - Add it to `terraform.tfvars`
+- Google Cloud project id
 - [Github personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
   - [Settings > Developer Settings > Personal Access Tokens](https://github.com/settings/tokens)
   - Grant it permissions to the following scopes:
     - `repo` (for creating repos)
     - `delete-repo` (for cleanup at the end)
-  - Add it to `terraform.tfvars`
 - [Apollo Studio Personal API key](https://studio.apollographql.com/user-settings/api-keys)
-  - **Do not** add it to `terraform.tfvars`
+
+### Export all necessary variables
+
+```sh
+export PROJECT_ID="<your google cloud project id>"
+export APOLLO_KEY="<your apollo personal api key>"
+export GITHUB_ORG="<your github org>"
+
+export TF_VAR_project_id=$PROJECT_ID
+export TF_VAR_github_token="<your github personal access token>"
+```
+
+Make a copy of `.env.sample` called `.env` to keep track of these values. You can always run `source .env` to reload all environment variables in a new terminal session.
 
 ### Run setup commands
 
 ```sh
-export PROJECT_ID="<your-project-id>"
-
-# gcloud
 gcloud components update
 gcloud components install gke-gcloud-auth-plugin
 gcloud auth application-default login
@@ -70,32 +74,27 @@ gcloud services enable \
 gh auth login
 ```
 
-```
-export APOLLO_KEY="<your personal apollo api key>"
+```sh
 cd 01-setup
 ./create_graph.sh
-# Save the output in terraform.tfvars. Example:
+
+# Sample output:
 #
-# New terraform variables:
-#
-# apollo_key      = "service:apollo-supergraph-k8s-5ac437:asdasdfasdfasd"
-# apollo_graph_id = "apollo-supergraph-k8s-asdfas"
+# export TF_VAR_apollo_key="service:apollo-supergraph-k8s-5ac437:asdasdfasdfasd"
+# export TF_VAR_apollo_graph_id="apollo-supergraph-k8s-asdfas"
 ```
+
+Use the generated output to export the Apollo variables in your current terminal session.
 
 <details>
   <summary>Optional: how do I specify a different name for clusters and repos? (The default is "apollo-supergraph-k8s".)</summary>
 
-1.  Before running `create_graph.sh` or `setup_clusters.sh`, export the prefix as a variable:
+Before running `create_graph.sh`, `setup_clusters.sh`, or `terraform apply` export the prefix as as environment variables:
 
-    ```sh
-    export CLUSTER_PREFIX=my-custom-prefix
-    ```
-
-2.  Before running `terraform apply`, add another variable to `terraform.tfvars`:
-
-    ```terraform
-    demo_name = "my-custom-prefix"
-    ```
+```sh
+export CLUSTER_PREFIX=my-custom-prefix
+export TF_VAR_demo_name=$CLUSTER_PREFIX
+```
 
 </details>
 
@@ -187,7 +186,6 @@ open http://localhost:4000
 Commits to the `main` branch of the subgraph repos are automatically built and deployed to the `dev` cluster. To deploy to prod, run the deploy actions:
 
 ```sh
-export GITHUB_ORG=<your github org>
 gh workflow run deploy-gke --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-a \
   -f version=main \
   -f environment=prod \

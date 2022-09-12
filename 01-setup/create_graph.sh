@@ -74,8 +74,8 @@ fi
 GRAPH_KEY=$(echo $CREATE_RESP | jq -r ".data.newService.apiKeys[0].token")
 
 echo ''
-echo "New terraform variables:"
+echo "Exporting Apollo credentials as Terraform variables:"
 echo ''
-echo "apollo_key      = \"$GRAPH_KEY\""
-echo "apollo_graph_id = \"$GRAPH_ID\""
+echo "export TF_VAR_apollo_key=\"$GRAPH_KEY\""
+echo "export TF_VAR_apollo_graph_id=\"$GRAPH_ID\""
 echo ''

@@ -17,6 +17,7 @@ variable "github_token" {
 
 variable "project_region" {
   description = "project region"
+  default     = "us-east1"
 }
 
 variable "gke_num_nodes" {

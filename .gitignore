@@ -30,3 +30,4 @@ terraform.rc
 kubeconfig*
 github-deploy-key.json
 *.tfvars
+.env
