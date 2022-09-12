@@ -42,7 +42,8 @@ resource "github_repository" "subgraph_repo_b" {
   }
 }
 
-// GH -> GKE Serivce Account and credentials
+// GH -> GKE Serivce Accounts and credentials
+// Deployer credentials for subgraph repos
 resource "google_service_account" "github-deploy-gsa" {
   project      = var.project_id
   account_id   = "${substr(var.demo_name, 0, 12)}-github-deploy-gsa"
@@ -64,6 +65,25 @@ resource "google_service_account_key" "github-deploy-key" {
 resource "local_file" "github-deploy-key" {
   content  = base64decode(google_service_account_key.github-deploy-key.private_key)
   filename = "${path.module}/github-deploy-key.json"
+}
+
+// Service Admin credentials for infra repo (so it can manage more resources like cluster roles)
+resource "google_service_account" "github-manage-gsa" {
+  project      = var.project_id
+  account_id   = "${substr(var.demo_name, 0, 12)}-github-manage-gsa"
+  display_name = "${substr(var.demo_name, 0, 12)}-github-manage-gsa"
+}
+resource "google_project_iam_member" "github-manage-admin" {
+  project = var.project_id
+  role    = "roles/container.serviceAdmin"
+  member  = "serviceAccount:${google_service_account.github-manage-gsa.email}"
+}
+resource "google_service_account_key" "github-manage-key" {
+  service_account_id = google_service_account.github-manage-gsa.name
+}
+resource "local_file" "github-manage-key" {
+  content  = base64decode(google_service_account_key.github-manage-key.private_key)
+  filename = "${path.module}/github-manage-key.json"
 }
 
 // GH Action Secrets
@@ -130,5 +150,5 @@ resource "github_actions_secret" "infra_cluster_prefix" {
 resource "github_actions_secret" "infra_gcp_secret" {
   repository      = github_repository.infra_repo.name
   secret_name     = "GCP_CREDENTIALS"
-  plaintext_value = base64decode(google_service_account_key.github-deploy-key.private_key)
+  plaintext_value = base64decode(google_service_account_key.github-manage-key.private_key)
 }
