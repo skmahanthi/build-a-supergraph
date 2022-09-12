@@ -1,6 +1,0 @@
-project_id     = "" # Google Cloud Project ID
-
-github_token    = "" # Personal API Token
-
-apollo_key      = "" # Graph Admin API key from create_graph.sh output
-apollo_graph_id = "" # Graph ID from create_graph.sh output
