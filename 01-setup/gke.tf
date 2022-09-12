@@ -14,18 +14,16 @@ module "gke_auth" {
 }
 
 module "gke" {
-  source = "terraform-google-modules/kubernetes-engine/google//modules/beta-public-cluster"
+  source = "terraform-google-modules/kubernetes-engine/google"
   for_each = {
     for index, stage in var.demo_stages : stage.name => stage
   }
 
-  project_id                           = var.project_id
-  name                                 = "${var.demo_name}-${each.value.name}"
-  regional                             = true
-  region                               = var.project_region
-  disable_legacy_metadata_endpoints    = true
-  kubernetes_version                   = "1.23" # Bug w/ 1.24: https://github.com/hashicorp/terraform-provider-kubernetes/pull/1792
-  monitoring_enable_managed_prometheus = true
+  project_id                        = var.project_id
+  name                              = "${var.demo_name}-${each.value.name}"
+  regional                          = true
+  region                            = var.project_region
+  disable_legacy_metadata_endpoints = true
 
   network           = module.gcp-network[each.key].network_name
   subnetwork        = module.gcp-network[each.key].subnets_names[0]
