@@ -1,6 +1,6 @@
 # 01 - Setup
 
-⏱ estimated time: 45 minutes
+⏱ Estimated time: 45 minutes
 
 ## What you'll build
 
@@ -84,7 +84,7 @@ cd 01-setup
 # export TF_VAR_apollo_graph_id="apollo-supergraph-k8s-asdfas"
 ```
 
-Use the generated output to export the Apollo variables in your current terminal session.
+Use the generated output to export the Apollo variables in your current terminal session. Paste this into `.env` to keep track of these values.
 
 <details>
   <summary>Optional: how do I specify a different name for clusters and repos? (The default is "apollo-supergraph-k8s".)</summary>
@@ -126,7 +126,6 @@ Expected output:
 kubernetes_cluster_names = {
   "dev" = "apollo-supergraph-k8s-dev"
   "prod" = "apollo-supergraph-k8s-prod"
-  "infra" = "apollo-supergraph-k8s-infra"
 }
 repo_infra = "https://github.com/you/apollo-supergraph-k8s-infrastructure"
 repo_subgraph_a = "https://github.com/you/apollo-supergraph-k8s-subgraph-a"
@@ -138,13 +137,12 @@ repo_subgraph_b = "https://github.com/you/apollo-supergraph-k8s-subgraph-b"
 
 Terraform provisions:
 
-- Three Kubernetes clusters (dev, prod, infra-tooling)
-- VPCs for the clusters to communicate with one another
+- Two Kubernetes clusters (dev and prod)
 - Runtime secrets for the Router to communicate with Studio
 - Three Github repos (subgraph-a, subgraph-b, infra)
 - Github action secrets for GCP and Apollo credentials
 
-The subgraph repos are configured to build and deploy to the `dev` cluster once they're provisioned.
+The subgraph repos are configured to build and deploy to the `dev` cluster once they're provisioned. (The deploy may fail the first time, so choose "Rerun failed jobs" in the Github UI to try again.)
 
 </details>
 
@@ -186,13 +184,13 @@ open http://localhost:4000
 Commits to the `main` branch of the subgraph repos are automatically built and deployed to the `dev` cluster. To deploy to prod, run the deploy actions:
 
 ```sh
-gh workflow run deploy-gke --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-a \
+gh workflow run "Manual Deploy" --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-a \
   -f version=main \
   -f environment=prod \
   -f dry-run=false \
   -f debug=false
 
-gh workflow run deploy-gke --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-b \
+gh workflow run "Manual Deploy" --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-b \
   -f version=main \
   -f environment=prod \
   -f dry-run=false \

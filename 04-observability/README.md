@@ -1,6 +1,6 @@
 # 04 - Observability
 
-⏱ estimated time: TODO
+⏱ Estimated time: 5 minutes
 
 ## What you'll build
 
@@ -8,14 +8,24 @@
 
 ## Part A: Setup Open Telemetry
 
-- TODO: manifests to add to infra repo for
-  - OTel collector
-  - Prometheus
-  - Zipkin
+Run the "Deploy Open Telemetry Collector" Github workflow to provisions the necessary resources your `prod` cluster:
+
+```sh
+gh workflow run "Deploy Open Telemetry Collector" --repo $GITHUB_ORG/apollo-supergraph-k8s-infra
+```
+
+The router and subgraphs are already configured to send Open Telemetry traces to the collector, which is configured to send traces to Google Trace.
 
 ## Part B: Demonstrate traces and metrics
 
-- TODO: instructions for seeing traces and metrics
+Make a GraphQL request to the router via its IP address:
+
+```sh
+ROUTER_IP=$(kubectl get ingress -n router -o jsonpath="{.*.*.status.loadBalancer.ingress.*.ip}")
+open http://$ROUTER_IP
+```
+
+Visit [Google Trace](https://console.cloud.google.com/traces/list) to view traces.
 
 ## Onward!
 

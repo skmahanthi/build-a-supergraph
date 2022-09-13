@@ -1,6 +1,6 @@
 # 03 - Schema checks
 
-⏱ estimated time: TODO
+⏱ Estimated time: 5 minutes
 
 ## What you'll build
 
@@ -8,17 +8,29 @@
 
 ## Part A: Schema checks on pull requests
 
-- TODO: add rover subgraph check steps to PR workflow in subgrpahs
+In both **subgraph-a** and **subgrap-b** repositories:
+
+- Edit `.github/workflows/Pull Request Check Code.yml`
+- Add a new job to the bottom of the file:
+  ```yaml
+  checks:
+    needs: [npm-build]
+    strategy:
+      matrix:
+        variant: [dev, prod]
+    uses: ./.github/workflows/_rover-subgraph-check.yml
+    secrets: inherit
+    with:
+      subgraph_name: subgraph-a
+      variant: ${{ matrix.variant }}
+  ```
+- Optional: install the Apollo Studio Github app to see Check status on PRs: https://github.com/marketplace/apollo-studio.
 
 ## Part B: Demonstrate a schema change
 
-- TODO: instructions for:
-  - making a schema change in a subgraph
-  - open a PR
-  - see check results
-  - merge PR
-  - see results in dev
-  - trigger prod deploy
+1. Make a schema change.
+2. Open a Pull Request
+3. Observe that the pull request check fails or succeeds.
 
 ## Onward!
 
