@@ -54,11 +54,6 @@ resource "google_project_iam_member" "github-deploy-developer" {
   role    = "roles/container.developer"
   member  = "serviceAccount:${google_service_account.github-deploy-gsa.email}"
 }
-resource "google_project_iam_member" "github-deploy-viewer" {
-  project = var.project_id
-  role    = "roles/container.clusterViewer"
-  member  = "serviceAccount:${google_service_account.github-deploy-gsa.email}"
-}
 resource "google_service_account_key" "github-deploy-key" {
   service_account_id = google_service_account.github-deploy-gsa.name
 }
