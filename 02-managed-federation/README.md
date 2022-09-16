@@ -74,6 +74,8 @@ ROUTER_IP=$(kubectl get ingress -n router -o jsonpath="{.*.*.status.loadBalancer
 open http://$ROUTER_IP
 ```
 
+(The ingress might take a little while to create, so if it doesn't work just wait a few minutes.)
+
 ## Onward!
 
 [Step 3: Schema Checks](../03-schema-checks/)

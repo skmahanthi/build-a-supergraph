@@ -10,9 +10,13 @@ This repository contains the demos for the "Build a Supergraph" series. All you 
 
 ![Architecture diagram of the supergraph](build-a-supergraph.png)
 
+### The ending Software Development Life Cycle (SLDC)
+
+![Software Development Life Cycle](sdlc.png)
+
 ## Contents
 
-⏱ estimated time: TODO
+⏱ estimated time: 1 hour 15 minutes
 💰 estimated cost: TODO
 
 ### [Step 1: Setup](/01-setup)
