@@ -56,12 +56,12 @@ In both **subgraph-a** and **subgrap-b** repositories:
 Now that the supergraph schema is available via Apollo Uplink, you can deploy the router:
 
 ```
-gh workflow run "Deploy Router GKE" --repo $GITHUB_ORG/apollo-supergraph-k8s-infrastructure \
+gh workflow run "Deploy Router GKE" --repo $GITHUB_ORG/apollo-supergraph-k8s-infra \
   -f environment=dev \
   -f dry-run=false \
   -f debug=false
 
-gh workflow run "Deploy Router GKE" --repo $GITHUB_ORG/apollo-supergraph-k8s-infrastructure \
+gh workflow run "Deploy Router GKE" --repo $GITHUB_ORG/apollo-supergraph-k8s-infra \
   -f environment=prod \
   -f dry-run=false \
   -f debug=false

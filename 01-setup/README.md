@@ -55,6 +55,18 @@ export TF_VAR_github_token="<your github personal access token>"
 
 Make a copy of `.env.sample` called `.env` to keep track of these values. You can always run `source .env` to reload all environment variables in a new terminal session.
 
+```sh
+cd 01-setup
+./create_graph.sh
+
+# Sample output:
+#
+# export TF_VAR_apollo_key="service:apollo-supergraph-k8s-5ac437:asdasdfasdfasd"
+# export TF_VAR_apollo_graph_id="apollo-supergraph-k8s-asdfas"
+```
+
+Use the generated output to export the Apollo variables in your current terminal session. Paste this into `.env` to keep track of these values.
+
 ### Run setup commands
 
 ```sh
@@ -73,18 +85,6 @@ gcloud services enable \
 ```
 gh auth login
 ```
-
-```sh
-cd 01-setup
-./create_graph.sh
-
-# Sample output:
-#
-# export TF_VAR_apollo_key="service:apollo-supergraph-k8s-5ac437:asdasdfasdfasd"
-# export TF_VAR_apollo_graph_id="apollo-supergraph-k8s-asdfas"
-```
-
-Use the generated output to export the Apollo variables in your current terminal session. Paste this into `.env` to keep track of these values.
 
 <details>
   <summary>Optional: how do I specify a different name for clusters and repos? (The default is "apollo-supergraph-k8s".)</summary>
@@ -127,7 +127,7 @@ kubernetes_cluster_names = {
   "dev" = "apollo-supergraph-k8s-dev"
   "prod" = "apollo-supergraph-k8s-prod"
 }
-repo_infra = "https://github.com/you/apollo-supergraph-k8s-infrastructure"
+repo_infra = "https://github.com/you/apollo-supergraph-k8s-infra"
 repo_subgraph_a = "https://github.com/you/apollo-supergraph-k8s-subgraph-a"
 repo_subgraph_b = "https://github.com/you/apollo-supergraph-k8s-subgraph-b"
 ```
@@ -152,7 +152,7 @@ After creating the necessary clusters, you will need to run the included cluster
 
 ```sh
 cd 01-setup
-./setup_clusters.sh # about 3 minutes
+./setup_clusters.sh # about 2 minutes
 ```
 
 <details>
@@ -173,7 +173,7 @@ After completing, you should be able to run `kubectl port-forward` to test the s
 
 ```sh
 kubectx apollo-supergraph-k8s-dev
-kubectl port-forward service/subgraph-a-chart 4000:4000
+kubectl port-forward service/graphql -n subgraph-a 4000:4000
 open http://localhost:4000
 ```
 
@@ -199,7 +199,7 @@ gh workflow run "Manual Deploy" --repo $GITHUB_ORG/apollo-supergraph-k8s-subgrap
 
 ```sh
 kubectx apollo-supergraph-k8s-prod
-kubectl port-forward service/subgraph-a-chart 4000:4000
+kubectl port-forward service/graphql -n subgraph-a 4000:4000
 open http://localhost:4000
 ```
 
