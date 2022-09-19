@@ -14,7 +14,6 @@ In both **subgraph-a** and **subgrap-b** repositories:
 - Add a new job to the bottom of the file:
   ```yaml
   checks:
-    needs: [npm-build]
     strategy:
       matrix:
         variant: [dev, prod]
