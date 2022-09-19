@@ -18,7 +18,7 @@ In both **subgraph-a** and **subgrap-b** repositories:
     uses: ./.github/workflows/_rover-subgraph-publish.yml
     secrets: inherit
     with:
-      subgraph_name: subgraph-a # change this to subgraph-b in that repo
+      subgraph_name: subgraph-a # change to subgraph-b in that repo
       variant: dev
   ```
 - After merging the code to the `main` branch, the `Merge to Main` action will build the docker container, deploy the subgraph application, and finally publish the subgraph schema to Apollo Studio.
@@ -30,7 +30,7 @@ In both **subgraph-a** and **subgrap-b** repositories:
     uses: ./.github/workflows/_rover-subgraph-publish.yml
     secrets: inherit
     with:
-      subgraph_name: subgraph-a # change this to subgraph-b in that repo
+      subgraph_name: subgraph-a # change to subgraph-b in that repo
       variant: ${{ inputs.environment }}
   ```
 - After merging this change to main, trigger the `Manual Deploy` action to deploy and publish to production:
@@ -67,14 +67,11 @@ gh workflow run "Deploy Router GKE" --repo $GITHUB_ORG/apollo-supergraph-k8s-inf
   -f debug=false
 ```
 
-The router has an IP address, so you can try it out with these commands:
+Try out the router using `port-forward`:
 
 ```sh
-ROUTER_IP=$(kubectl get ingress -n router -o jsonpath="{.*.*.status.loadBalancer.ingress.*.ip}")
-open http://$ROUTER_IP
+kubectl port-forward service/router -n router 4000:80
 ```
-
-(The ingress might take a little while to create, so if it doesn't work just wait a few minutes.)
 
 ## Onward!
 

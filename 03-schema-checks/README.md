@@ -21,7 +21,7 @@ In both **subgraph-a** and **subgrap-b** repositories:
     uses: ./.github/workflows/_rover-subgraph-check.yml
     secrets: inherit
     with:
-      subgraph_name: subgraph-a
+      subgraph_name: subgraph-a # change to subgraph-b in that repo
       variant: ${{ matrix.variant }}
   ```
 - Optional: install the Apollo Studio Github app to see Check status on PRs: https://github.com/marketplace/apollo-studio.
