@@ -1,22 +1,18 @@
-// Outputs the cluster names for each stage
 output "kubernetes_cluster_names" {
   value = {
     for k, v in module.gke : k => v.name
   }
-  description = "Cluster names"
+  description = "Cluster names for each stage"
 }
 
-output "repo_subgraph_a" {
-  value       = github_repository.subgraph_repo_a.html_url
-  description = "Subgraph A Repo"
-}
-
-output "repo_subgraph_b" {
-  value       = github_repository.subgraph_repo_b.html_url
-  description = "Subgraph B Repo"
+output "subgraph_repos" {
+  value = {
+    for k, v in github_repository.subgraph_repos : k => v.html_url
+  }
+  description = "Subgraph repo URLs"
 }
 
 output "repo_infra" {
   value       = github_repository.infra_repo.html_url
-  description = "Infra (router, o11y) Repo"
+  description = "Infra (router, o11y) repo URLs"
 }

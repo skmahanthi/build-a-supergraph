@@ -24,6 +24,7 @@ kubectl get secret --namespace monitoring grafana -o jsonpath="{.data.admin-pass
 Visit the Grafana UI at [http://localhost:3000/](http://localhost:3000/) using `port-forward`. Login with the username "admin" and the password from the command above.
 
 ```sh
+kubectx apollo-supergraph-k8s-prod
 kubectl port-forward svc/grafana -n monitoring 3000:80
 ```
 

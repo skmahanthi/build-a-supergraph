@@ -1,7 +1,9 @@
-/**
-  This file creates X number of GKE clusters using the var.demo_stages set w/in ./variables.tf
-  Each cluster uses the same node configuration for simplicity, but can be easily overridden at a later date. 
-**/
+# For each stage in `var.demo_stages`, create a Kubernetes cluster.
+#
+# The clusters a generally configured the same. The subnet IP ranges, node
+# instance type, and node counts are configurable per cluster.
+#
+# The clusters are named `{demo_name}-{stage}`, e.g. "apollo-supergraph-k8s-dev".
 module "gke_auth" {
   source = "terraform-google-modules/kubernetes-engine/google//modules/auth"
   for_each = {
@@ -33,8 +35,8 @@ module "gke" {
     {
       name         = "${each.value.name}-node-pool"
       machine_type = each.value.node_type
-      min_count    = 1
-      max_count    = var.gke_num_nodes
+      min_count    = each.value.min_nodes
+      max_count    = each.value.max_nodes
       disk_size_gb = 20
     },
   ]

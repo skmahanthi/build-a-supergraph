@@ -21,6 +21,7 @@ The router and subgraphs are already configured to send Open Telemetry traces to
 Make a GraphQL request to the router via port-forwarding:
 
 ```sh
+kubectx apollo-supergraph-k8s-prod
 kubectl port-forward service/router -n router 4000:80
 ```
 

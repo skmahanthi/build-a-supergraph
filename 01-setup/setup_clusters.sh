@@ -31,10 +31,11 @@ environment_setup(){
     echo "Configuring Kubeconfig for ${1}..."
     gcloud container clusters get-credentials ${1} --zone ${PROJECT_REGION} --project ${PROJECT_ID}
 
-    # short context aliases
+    # short context aliases: supports `kubectx apollo-supergraph-k8s-dev`
     kubectx ${1}=.
 
-    # secrets setup - namespace, sa, and binding
+    # secrets setup: namespace, service account, and binding
+    # the service account name matches the router's service account in its helm chart
     kubectl create namespace router --dry-run=client -o yaml | kubectl apply -f -
     kubectl create serviceaccount -n "router" "secrets-csi-k8s" --dry-run=client -o yaml | kubectl apply -f -
     kubectl annotate serviceaccount -n "router" "secrets-csi-k8s" "iam.gke.io/gcp-service-account=${CLUSTER_PREFIX:0:12}-secrets-csi-k8s@$PROJECT_ID.iam.gserviceaccount.com" --overwrite
@@ -48,7 +49,8 @@ environment_setup(){
         --member="serviceAccount:${CLUSTER_PREFIX:0:12}-secrets-csi-k8s@$PROJECT_ID.iam.gserviceaccount.com" \
         --role='roles/secretmanager.secretAccessor'
 
-    # monitoring setup- namespace, sa, and binding
+    # monitoring setup: namespace, service account, and binding
+    # the service account name matches the otel collector's service account in its helm chart
     kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
     kubectl create serviceaccount -n "monitoring" "metrics-writer" --dry-run=client -o yaml | kubectl apply -f -
     kubectl annotate serviceaccount -n "monitoring" "metrics-writer" "iam.gke.io/gcp-service-account=${CLUSTER_PREFIX:0:12}-metrics-writer@$PROJECT_ID.iam.gserviceaccount.com" --overwrite

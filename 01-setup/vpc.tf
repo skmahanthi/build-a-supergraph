@@ -1,6 +1,4 @@
-/**
-  This file creates X number of VPCs set w/in ./variables.tf, which are used by the assigned clusters.
-**/
+# Create a VPC for each stage. The subnet names are used to create clusters in gke.tf.
 module "gcp-network" {
   source = "terraform-google-modules/network/google"
   for_each = {

@@ -16,8 +16,8 @@ This repository contains the demos for the "Build a Supergraph" series. All you 
 
 ## Contents
 
-⏱ estimated time: 1 hour 15 minutes
-💰 estimated cost: TODO
+- ⏱ estimated time: 1 hour 15 minutes
+- 💰 estimated cost: $10
 
 ### [Step 1: Setup](/01-setup)
 
