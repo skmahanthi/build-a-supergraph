@@ -93,12 +93,23 @@ kubectl delete k6/run-short-1234
 
 ## Part C: Cleanup
 
+In order to delete some non-Kubernetes resources created by Google Cloud, it's easiest to just delete everything:
+
+```sh
+kubectx apollo-supergraph-k8s-dev
+kubectl delete daemonsets,replicasets,services,deployments,pods,rc,ingress --all --all-namespaces
+kubectx apollo-supergraph-k8s-prod
+kubectl delete daemonsets,replicasets,services,deployments,pods,rc,ingress --all --all-namespaces
+```
+
+Then you can destroy all the provisioned resources (Kubernetes clusters, Github repositories) with terraform:
+
 ```sh
 cd 01-setup
 terraform destroy # takes 10 minutes
 ```
 
-You may need to manually delete [Network Endpoint Groups](https://console.cloud.google.com/compute/networkendpointgroups/list) for `terraform destroy` to succeed. You can safely run `terraform destroy` again after deleting resources.
+Lastly, you can remove the contexts from your `kubectl`:
 
 ```sh
 kubectl config delete-context apollo-supergraph-k8s-dev

@@ -67,7 +67,14 @@ gh workflow run "Deploy Router GKE" --repo $GITHUB_ORG/apollo-supergraph-k8s-inf
   -f debug=false
 ```
 
-Try out the router using `port-forward`:
+Make a GraphQL request to the router via its IP address:
+
+```sh
+ROUTER_IP=$(kubectl get ingress -n router -o jsonpath="{.*.*.status.loadBalancer.ingress.*.ip}")
+open http://$ROUTER_IP
+```
+
+The Google Cloud ingress may take a few minutes to start. If you don't want to wait for an IP address you can use `port-forward`:
 
 ```sh
 kubectl port-forward service/router -n router 4000:80
