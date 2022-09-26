@@ -18,11 +18,12 @@ The router and subgraphs are already configured to send Open Telemetry traces to
 
 ## Part B: Demonstrate traces and metrics
 
-Make a GraphQL request to the router via port-forwarding:
+Make a GraphQL request to the router via its IP address:
 
 ```sh
 kubectx apollo-supergraph-k8s-prod
-kubectl port-forward service/router -n router 4000:80
+ROUTER_IP=$(kubectl get ingress -n router -o jsonpath="{.*.*.status.loadBalancer.ingress.*.ip}")
+open http://$ROUTER_IP
 ```
 
 Visit [Google Trace](https://console.cloud.google.com/traces/list) to view traces.
