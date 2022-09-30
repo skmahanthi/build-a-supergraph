@@ -39,33 +39,40 @@ cd build-a-supergraph
   - [Settings > Developer Settings > Personal Access Tokens](https://github.com/settings/tokens)
   - Grant it permissions to the following scopes:
     - `repo` (for creating repos)
-    - `delete-repo` (for cleanup at the end)
+    - `delete_repo` (for cleanup at the end)
 - [Apollo Studio Personal API key](https://studio.apollographql.com/user-settings/api-keys)
 
 ### Export all necessary variables
+
+Make a copy of `.env.sample` called `.env` to keep track of these values. You can always run `source .env` to reload all environment variables in a new terminal session.
+
+```sh
+cd 01-setup/
+cp .env.sample .env
+```
+
+Edit the new `.env` file:
 
 ```sh
 export PROJECT_ID="<your google cloud project id>"
 export APOLLO_KEY="<your apollo personal api key>"
 export GITHUB_ORG="<your github org>"
-
-export TF_VAR_project_id=$PROJECT_ID
 export TF_VAR_github_token="<your github personal access token>"
 ```
 
-Make a copy of `.env.sample` called `.env` to keep track of these values. You can always run `source .env` to reload all environment variables in a new terminal session.
+Run this script to create your graph and get environment variables for Studio:
 
 ```sh
 cd 01-setup
+source .env
 ./create_graph.sh
-
-# Sample output:
-#
-# export TF_VAR_apollo_key="service:apollo-supergraph-k8s-5ac437:asdasdfasdfasd"
-# export TF_VAR_apollo_graph_id="apollo-supergraph-k8s-asdfas"
 ```
 
-Use the generated output to export the Apollo variables in your current terminal session. Paste this into `.env` to keep track of these values.
+The script adds a couple more environment variables to `.env`, so reload your environment now:
+
+```sh
+source .env
+```
 
 ### Run setup commands
 
@@ -110,8 +117,6 @@ You may need to clean up your Github packages before creating new repos of the s
 ### Create Kubernetes clusters, basic infrastructure, and Github repositories
 
 **Note: The following commands will create resources on your GCP account, and begin to accrue a cost.** The example infrastructure defaults to a lower-cost environment (small node count and instance size), however it will not be covered by GCP's free tier.
-
-Once you have populated your `terraform.tfvars` file, run the following commands:
 
 ```sh
 cd 01-setup
@@ -160,7 +165,7 @@ cd 01-setup
 
 For both `dev` and `prod` clusters:
 
-- Configures your local `kubeconfig` with access information, making it easier to apply local Helm charts
+- Configures your local `kubectl` so you can inspect your clusters
 - Creates a `router` namespace we'll use to deploy the Apollo Router
 - Creates a Kubernetes service account (`secrets-csi-k8s`) used for secrets access
 - Installs the [GCP CSI Driver for Kubernetes](https://github.com/GoogleCloudPlatform/secrets-store-csi-driver-provider-gcp)
@@ -169,13 +174,40 @@ For both `dev` and `prod` clusters:
 
 </details>
 
-After completing, you should be able to run `kubectl port-forward` to test the subgraphs in `dev`:
+After this completes, kick off deploys of both subgraphs to the dev cluster:
+
+```sh
+gh workflow run "Merge to Main" --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-a \
+  -f version=main \
+  -f environment=dev \
+  -f dry-run=false \
+  -f debug=false
+
+gh workflow run "Merge to Main" --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-b \
+  -f version=main \
+  -f environment=dev \
+  -f dry-run=false \
+  -f debug=false
+
+# this deploys a dependency for prod, see note below
+gh workflow run "Deploy Open Telemetry Collector" --repo $GITHUB_ORG/apollo-supergraph-k8s-infra
+```
+
+<details>
+  <summary>Note about "initial commit" errors</summary>
+
+When terraform creates the repositories, they immediately kick off initial workflow runs. But the secrets needed are available at that point. The "initial commit" runs will fail, but we're just re-running them with the commands above.
+
+</details>
+
+You can try out a subgraph using port forwarding:
 
 ```sh
 kubectx apollo-supergraph-k8s-dev
 kubectl port-forward service/graphql -n subgraph-a 4000:4000
-open http://localhost:4000
 ```
+
+Then visit [http://localhost:4000/](http://localhost:4000/).
 
 ## Part C: Deploy applications
 
@@ -200,8 +232,9 @@ gh workflow run "Manual Deploy" --repo $GITHUB_ORG/apollo-supergraph-k8s-subgrap
 ```sh
 kubectx apollo-supergraph-k8s-prod
 kubectl port-forward service/graphql -n subgraph-a 4000:4000
-open http://localhost:4000
 ```
+
+Then visit [http://localhost:4000/](http://localhost:4000/).
 
 ## Onward!
 
