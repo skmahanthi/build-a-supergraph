@@ -177,18 +177,8 @@ For both `dev` and `prod` clusters:
 After this completes, kick off deploys of both subgraphs to the dev cluster:
 
 ```sh
-gh workflow run "Merge to Main" --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-a \
-  -f version=main \
-  -f environment=dev \
-  -f dry-run=false \
-  -f debug=false
-
-gh workflow run "Merge to Main" --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-b \
-  -f version=main \
-  -f environment=dev \
-  -f dry-run=false \
-  -f debug=false
-
+gh workflow run "Merge to Main" --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-a
+gh workflow run "Merge to Main" --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-b 
 # this deploys a dependency for prod, see note below
 gh workflow run "Deploy Open Telemetry Collector" --repo $GITHUB_ORG/apollo-supergraph-k8s-infra
 ```
