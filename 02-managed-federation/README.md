@@ -8,7 +8,7 @@
 
 ## Part A: Publish subgraph schemas to Apollo Studio
 
-In both **subgraph-a** and **subgrap-b** repositories:
+In both **subgraph-a** and **subgraph-b** repositories:
 
 - Edit `.github/workflows/Merge to Main.yml`
 - Add a new job to the bottom of the file:
