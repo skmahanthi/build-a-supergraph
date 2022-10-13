@@ -4,7 +4,7 @@
 
 ## What you'll build
 
-![Architecture diagram of the supergraph](diagram.png)
+![Architecture diagram of the supergraph](02-diagram.png)
 
 ## Part A: Publish subgraph schemas to Apollo Studio
 

@@ -4,7 +4,7 @@
 
 ## What you'll build
 
-![Architecture diagram of the supergraph](diagram.png)
+![Architecture diagram of the supergraph](03-diagram.png)
 
 ## Part A: Schema checks on pull requests
 
