@@ -143,11 +143,10 @@ repo_subgraph_b = "https://github.com/you/apollo-supergraph-k8s-subgraph-b"
 Terraform provisions:
 
 - Two Kubernetes clusters (dev and prod)
-- Runtime secrets for the Router to communicate with Studio
 - Three Github repos (subgraph-a, subgraph-b, infra)
 - Github action secrets for GCP and Apollo credentials
 
-The subgraph repos are configured to build and deploy to the `dev` cluster once they're provisioned. (The deploy may fail the first time, so choose "Rerun failed jobs" in the Github UI to try again.)
+The subgraph repos are configured to build and deploy to the `dev` cluster once they're provisioned. (The deploy will fail the first time. See "Note about "initial commit" errors" below.)
 
 </details>
 
@@ -166,15 +165,15 @@ cd 01-setup
 For both `dev` and `prod` clusters:
 
 - Configures your local `kubectl` so you can inspect your clusters
-- Creates a `router` namespace we'll use to deploy the Apollo Router
-- Creates a Kubernetes service account (`secrets-csi-k8s`) used for secrets access
-- Installs the [GCP CSI Driver for Kubernetes](https://github.com/GoogleCloudPlatform/secrets-store-csi-driver-provider-gcp)
-  - The CSI driver is used by the Apollo Router infrastructure later to access the Apollo API key and graph reference securely, using GCP's Secret Manager
-- Configures permissions to allow access to the secrets within Secret Manager
+- Configures namespace, service account, and role bindings for Open Telemetry and Google Traces.
 
 </details>
 
-After this completes, kick off deploys of both subgraphs to the dev cluster:
+After this completes, you're ready to deploy your subgraphs!
+
+## Part C: Deploy applications
+
+### Deploy subgraphs to dev
 
 ```sh
 gh workflow run "Merge to Main" --repo $GITHUB_ORG/apollo-supergraph-k8s-subgraph-a
@@ -198,8 +197,6 @@ kubectl port-forward service/graphql -n subgraph-a 4000:4000
 ```
 
 Then visit [http://localhost:4000/](http://localhost:4000/).
-
-## Part C: Deploy applications
 
 ### Deploy subgraphs to prod
 
