@@ -98,6 +98,11 @@ In order to delete some non-Kubernetes resources created by Google Cloud, it's e
 ```sh
 kubectx apollo-supergraph-k8s-dev
 kubectl delete daemonsets,replicasets,services,deployments,pods,rc,ingress --all --all-namespaces
+```
+
+The command may hang at the end. You can kill the process (`ctrl-c`) and repeat with the prod cluster:
+
+```
 kubectx apollo-supergraph-k8s-prod
 kubectl delete daemonsets,replicasets,services,deployments,pods,rc,ingress --all --all-namespaces
 ```
