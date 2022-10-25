@@ -13,6 +13,7 @@
 ```
 git clone https://github.com/apollosolutions/build-a-supergraph.git
 cd build-a-supergraph
+git pull
 ```
 
 ### Install dependencies
