@@ -90,3 +90,7 @@ kubectl delete k6/run-short-1234
 ```
 
 </details>
+
+## Wrapping up!
+
+[Step 6: Cleanup](../06-cleanup/)

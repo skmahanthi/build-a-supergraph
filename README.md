@@ -45,4 +45,6 @@ This repository contains the demos for the "Build a Supergraph" series. All you 
 
 - Part A: Deploy load testing client
 - Part B: Run load test and analyze results
-- Part C: Cleanup
+
+### [Step 6: Cleanup](/06-cleanup)
+- Part A: Automated cleanup
