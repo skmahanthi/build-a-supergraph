@@ -8,7 +8,7 @@
 
 ## Part A: Schema checks on pull requests
 
-In both **subgraph-a** and **subgrap-b** repositories:
+In both **subgraph-a** and **subgraph-b** repositories:
 
 - Edit `.github/workflows/Pull Request Check Code.yml`
 - Add a new job to the bottom of the file:

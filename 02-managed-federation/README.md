@@ -6,7 +6,7 @@
 
 ![Architecture diagram of the supergraph](02-diagram.png)
 
-## Part A: Publish subgraph schemas to Apollo Studio
+## Part A: Publish subgraph schemas to Apollo GraphOS
 
 In both **subgraph-a** and **subgraph-b** repositories:
 
@@ -21,8 +21,8 @@ In both **subgraph-a** and **subgraph-b** repositories:
       subgraph_name: subgraph-a # change to subgraph-b in that repo
       variant: dev
   ```
-- After merging the code to the `main` branch, the `Merge to Main` action will build the docker container, deploy the subgraph application, and finally publish the subgraph schema to Apollo Studio.
-- Visit your graph in Apollo Studio to see that the subgraph schemas published successfully and it built a new supergraph schema for the `dev` variant.
+- After merging the code to the `main` branch, the `Merge to Main` action will build the docker container, deploy the subgraph application, and finally publish the subgraph schema to Apollo GraphOS.
+- Visit your graph in GraphOS Studio to see that the subgraph schemas published successfully and it built a new supergraph schema for the `dev` variant.
 - Add a new job to `.github/workflows/Manual Deploy.yml`:
   ```yaml
   publish:
@@ -49,7 +49,7 @@ In both **subgraph-a** and **subgraph-b** repositories:
       -f debug=false
   ```
 
-- Visit your graph in Apollo Studio to see that the subgraph schemas published successfully and it built a new supergraph schema for the `prod` variant.
+- Visit your graph in GraphOS Studio to see that the subgraph schemas published successfully and it built a new supergraph schema for the `prod` variant.
 
 ## Part B: Deploy Apollo Router
 
