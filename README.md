@@ -3,7 +3,7 @@
 This repository contains the demos for the "Build a Supergraph" series. All you need to follow along is:
 
 - A Github account
-- An Apollo Studio account (free!)
+- An Apollo GraphOS account (free!)
 - A Google Cloud account
 
 ## What you'll build

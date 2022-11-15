@@ -29,7 +29,7 @@ git pull
 ### Gather accounts
 
 - [Github](https://github.com/signup)
-- [Apollo Studio](https://studio.apollographql.com/signup?referrer=build-a-supergraph)
+- [Apollo GraphOS](https://studio.apollographql.com/signup?referrer=build-a-supergraph)
 - [Google Cloud](https://console.cloud.google.com/freetrial)
   - Must have a project [with billing enabled](https://cloud.google.com/resource-manager/docs/creating-managing-projects#gcloud)
 
@@ -41,7 +41,7 @@ git pull
   - Grant it permissions to the following scopes:
     - `repo` (for creating repos)
     - `delete_repo` (for cleanup at the end)
-- [Apollo Studio Personal API key](https://studio.apollographql.com/user-settings/api-keys)
+- [Apollo GraphOS Personal API key](https://studio.apollographql.com/user-settings/api-keys)
 
 ### Export all necessary variables
 
@@ -61,7 +61,7 @@ export GITHUB_ORG="<your github org>"
 export TF_VAR_github_token="<your github personal access token>"
 ```
 
-Run this script to create your graph and get environment variables for Studio:
+Run this script to create your graph and get environment variables for GraphOS:
 
 ```sh
 cd 01-setup
