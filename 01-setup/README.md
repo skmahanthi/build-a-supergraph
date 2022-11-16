@@ -57,7 +57,7 @@ Edit the new `.env` file:
 ```sh
 export PROJECT_ID="<your google cloud project id>"
 export APOLLO_KEY="<your apollo personal api key>"
-export GITHUB_ORG="<your github org>"
+export GITHUB_ORG="<your github account name or organization name>"
 export TF_VAR_github_token="<your github personal access token>"
 ```
 
@@ -80,7 +80,7 @@ source .env
 ```sh
 gcloud components update
 gcloud components install gke-gcloud-auth-plugin
-gcloud auth application-default login
+gcloud auth login
 
 gcloud config set project ${PROJECT_ID}
 gcloud services enable \
