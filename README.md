@@ -50,7 +50,7 @@ This repository contains the demos for the "Build a Supergraph" series. All you 
 
 - Part A: Automated cleanup
 
-### [_Bonus_ Step 7: Contracts](/06-cleanup)
+### [🌟 _Bonus_ 🌟 Step 7: Contracts](/07-contracts)
 
 - Part A: Tag your subgraphs
 - Part B: Create a contract variant
