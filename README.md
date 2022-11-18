@@ -47,4 +47,11 @@ This repository contains the demos for the "Build a Supergraph" series. All you 
 - Part B: Run load test and analyze results
 
 ### [Step 6: Cleanup](/06-cleanup)
+
 - Part A: Automated cleanup
+
+### [_Bonus_ Step 7: Contracts](/06-cleanup)
+
+- Part A: Tag your subgraphs
+- Part B: Create a contract variant
+- Part C: Deploy a contract router
