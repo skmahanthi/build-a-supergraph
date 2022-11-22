@@ -4,7 +4,7 @@
 
 ## What you'll build
 
-![Architecture diagram of the supergraph](05-diagram.png)
+![Architecture diagram of the supergraph](05-diagram-fj.png)
 
 ## Part A: Deploy load testing client
 

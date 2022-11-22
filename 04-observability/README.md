@@ -4,7 +4,7 @@
 
 ## What you'll build
 
-![Architecture diagram of the supergraph](04-diagram.png)
+![Architecture diagram of the supergraph](04-diagram-fj.png)
 
 ## Part A: Setup Open Telemetry
 
