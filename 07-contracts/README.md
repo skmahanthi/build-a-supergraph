@@ -2,6 +2,12 @@
 
 > Contracts are available only for Enterprise users
 
+⏱ Estimated time: 5 minutes
+
+## What you'll build
+
+![Architecture diagram of the supergraph](07-diagram-fj.png)
+
 ## Part A: Tag your subgraphs
 
 Edit `src/schema.graphql` in either subgraph and add a tag to a field like so:

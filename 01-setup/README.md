@@ -4,7 +4,7 @@
 
 ## What you'll build
 
-![Architecture diagram of the supergraph](01-diagram.png)
+![Architecture diagram of the supergraph](01-diagram-fj.png)
 
 ## Part A: Gather accounts and credentials
 
