@@ -14,7 +14,10 @@ In both **subgraph-a** and **subgraph-b** repositories:
 - Add a new job to the bottom of the file:
   ```yaml
   publish:
-    needs: [deploy]
+    needs: [deploy_aws, deploy_gcp]
+    if: always() &&
+      (needs.deploy_aws.result == 'success' || needs.deploy_aws.result == 'skipped') &&
+      (needs.deploy_gcp.result == 'success' || needs.deploy_gcp.result == 'skipped')
     uses: ./.github/workflows/_rover-subgraph-publish.yml
     secrets: inherit
     with:
@@ -26,7 +29,10 @@ In both **subgraph-a** and **subgraph-b** repositories:
 - Add a new job to `.github/workflows/Manual Deploy.yml`:
   ```yaml
   publish:
-    needs: [deploy]
+    needs: [deploy_aws, deploy_gcp]
+    if: always() &&
+      (needs.deploy_aws.result == 'success' || needs.deploy_aws.result == 'skipped') &&
+      (needs.deploy_gcp.result == 'success' || needs.deploy_gcp.result == 'skipped')
     uses: ./.github/workflows/_rover-subgraph-publish.yml
     secrets: inherit
     with:
@@ -56,29 +62,40 @@ In both **subgraph-a** and **subgraph-b** repositories:
 Now that the supergraph schema is available via Apollo Uplink, you can deploy the router:
 
 ```
-gh workflow run "Deploy Router GKE" --repo $GITHUB_ORG/apollo-supergraph-k8s-infra \
+gh workflow run "Deploy Router" --repo $GITHUB_ORG/apollo-supergraph-k8s-infra \
   -f environment=dev \
   -f dry-run=false \
   -f debug=false
 
-gh workflow run "Deploy Router GKE" --repo $GITHUB_ORG/apollo-supergraph-k8s-infra \
+gh workflow run "Deploy Router" --repo $GITHUB_ORG/apollo-supergraph-k8s-infra \
   -f environment=prod \
   -f dry-run=false \
   -f debug=false
 ```
 
-Make a GraphQL request to the router via its IP address:
+Lastly, make a GraphQL request to the router via its IP address. Follow the below instructions for your cloud provider you are using. 
+
+### <image src="../images/gcp.svg" height="13" style="margin:auto;" /> GCP
 
 ```sh
+kubectx apollo-supergraph-k8s-prod
 ROUTER_IP=$(kubectl get ingress -n router -o jsonpath="{.*.*.status.loadBalancer.ingress.*.ip}")
 open http://$ROUTER_IP
 ```
 
-The Google Cloud ingress may take a few minutes to start. If you don't want to wait for an IP address you can use `port-forward`:
+Upon running the above commands, you'll have the Router page open and you can make requests against your newly deployed supergraph! 
+
+### <image src="../images/aws.svg" height="13" style="margin:auto;" /> AWS
 
 ```sh
-kubectl port-forward service/router -n router 4000:80
+kubectx apollo-supergraph-k8s-prod
+ROUTER_HOSTNAME=$(kubectl get ingress -n router -o jsonpath="{.*.*.status.loadBalancer.ingress.*.hostname}")
+open http://$ROUTER_HOSTNAME
 ```
+
+Upon running the above commands, you'll have the Router page open and you can make requests against your newly deployed supergraph! 
+
+**NOTE:** You may need to wait 5-10 minutes for the AWS load balancer to be available. 
 
 ## Onward!
 
