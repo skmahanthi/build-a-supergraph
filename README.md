@@ -4,7 +4,9 @@ This repository contains the demos for the "Build a Supergraph" series. All you 
 
 - A Github account
 - An Apollo GraphOS account (free!)
-- A Google Cloud account
+- An account for either:
+  - Google Cloud Platform (GCP) 
+  - Amazon Web Services (AWS)
 
 ## What you'll build
 
